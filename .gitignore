@@ -42,3 +42,4 @@
 /AdventOfCode/x64/Debug
 /.vs
 /packages
+*.user

@@ -422,6 +422,49 @@ void advent04(chrono::steady_clock::time_point begin)
 	cout << rollsToLift << endl;
 }
 
+void advent04_02(chrono::steady_clock::time_point begin)
+{
+	ifstream file("c:\\Downloads\\AdventOfCode\\04.txt");
+	if (!file.is_open())
+	{
+		throw "File is not open";
+	}
+	vector<string> rows;
+	string row;
+	while (getline(file, row))
+	{
+		rows.push_back(row);
+	}
+	size_t rowLength = rows[0].length();
+	int rollsToLift{};
+	int currentRollsToLift;
+	int round{ 0 };
+	do {
+		round++;
+		currentRollsToLift = 0;
+		for (int rowsIndex = 0; rowsIndex < rows.size(); rowsIndex++)
+		{
+			for (int columnIndex = 0; columnIndex < rowLength; columnIndex++)
+			{
+				if (rows[rowsIndex][columnIndex] != '@')
+				{
+					continue;
+				}
+				if (rollsCountArround(rows, rowsIndex, columnIndex) < 4)
+				{
+					rollsToLift++;
+					currentRollsToLift++;
+					rows[rowsIndex][columnIndex] = 'X';
+				}
+			}
+			
+		}
+		printTime("Round " + to_string(round), begin);
+	} while (currentRollsToLift > 0);
+
+	cout << rollsToLift << endl;
+}
+
 int main() {
 
 	// Source - https://stackoverflow.com/a
@@ -430,7 +473,7 @@ int main() {
 
 //***C++11 Style:***
 
-	measure("main", advent04);
+	measure("main", advent04_02);
 	
     return 0;
 };
