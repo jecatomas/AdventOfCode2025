@@ -43,3 +43,4 @@
 /.vs
 /packages
 *.user
+/AdventOfCode/x64/Release

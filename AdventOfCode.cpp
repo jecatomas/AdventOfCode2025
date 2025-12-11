@@ -11,6 +11,8 @@
 #include <fstream>
 #include <sstream>
 #include <functional>
+#include <filesystem>
+#include <ranges>
 
 using namespace std;
 
@@ -32,7 +34,8 @@ void measure(string name, function<void(chrono::steady_clock::time_point)> func)
 
 void advent01(chrono::steady_clock::time_point begin)
 {
-	std::ifstream file{ "c:\\Downloads\\AdventOfCode\\1-test.txt" };
+
+	std::ifstream file{ "input\\1-test.txt" };
 	if (!file.is_open())
 	{
 		throw "File is not open";
@@ -72,7 +75,7 @@ void advent01(chrono::steady_clock::time_point begin)
 
 void advent01_02(chrono::steady_clock::time_point begin)
 {
-	std::ifstream file{ "c:\\Downloads\\AdventOfCode\\1-test.txt" };
+	std::ifstream file{ "1-test.txt" };
 	if (!file.is_open())
 	{
 		throw "File is not open";
@@ -223,7 +226,7 @@ void advent02_02(chrono::steady_clock::time_point begin)
 
 void advent03(chrono::steady_clock::time_point begin)
 {
-	ifstream file{ "c:\\Downloads\\AdventOfCode\\03.txt" };
+	ifstream file{ "input\\03.txt" };
 	if (!file.is_open())
 	{
 		throw "File is not open";
@@ -275,7 +278,7 @@ void advent03(chrono::steady_clock::time_point begin)
 
 void advent03_02(chrono::steady_clock::time_point begin)
 {
-	ifstream file{ "c:\\Downloads\\AdventOfCode\\03.txt" };
+	ifstream file{ "input\\03.txt" };
 	if (!file.is_open())
 	{
 		throw "File is not open";
@@ -362,7 +365,6 @@ void advent03_02(chrono::steady_clock::time_point begin)
 	cout << sum << endl;
 }
 
-
 int rollsCountArround(vector<string> const &rows, int rowIndexToCheck, int columnIndexToCheck)
 {
 	int rollsCout{};
@@ -390,7 +392,7 @@ int rollsCountArround(vector<string> const &rows, int rowIndexToCheck, int colum
 
 void advent04(chrono::steady_clock::time_point begin)
 {
-	ifstream file("c:\\Downloads\\AdventOfCode\\04.txt");
+	ifstream file("input\\04.txt");
 	if (!file.is_open())
 	{
 		throw "File is not open";
@@ -424,7 +426,7 @@ void advent04(chrono::steady_clock::time_point begin)
 
 void advent04_02(chrono::steady_clock::time_point begin)
 {
-	ifstream file("c:\\Downloads\\AdventOfCode\\04.txt");
+	ifstream file("input\\04.txt");
 	if (!file.is_open())
 	{
 		throw "File is not open";
@@ -465,15 +467,135 @@ void advent04_02(chrono::steady_clock::time_point begin)
 	cout << rollsToLift << endl;
 }
 
+void advent05(chrono::steady_clock::time_point begin)
+{
+	ifstream file{ "input\\05.txt" };
+	if (!file.is_open()) {
+		throw "File is not open";
+	}
+	string line;
+	bool processIngredients{false};
+	int sum{};
+	vector<tuple<long long, long long>> ingredientsFresh;
+	int lineNumber{};
+	while (getline(file, line)) {
+		lineNumber++;
+		cout << "Line Nr: " << lineNumber << endl;
+		if (processIngredients) {
+			long long ingredientId = stoll(line);
+			// todo:
+			auto a = ranges::find_if(ingredientsFresh
+			                         ,
+			                         [ingredientId](tuple<long long, long long> t) { return get<0>(t) <= ingredientId && ingredientId <= get<1>(t); }
+			);
+			if (a != ingredientsFresh.end())
+			{
+				sum++;
+			}
+			continue;
+		}
+		if (line.empty())
+		{
+			processIngredients = true;
+			continue;
+		}
+		size_t index = line.find('-');
+		long long from = stoll(line.substr(0, index));
+		long long to = stoll(line.substr(index + 1, line.length() - index - 1));
+		ingredientsFresh.emplace_back(from, to);
+		
+	}
+	cout << sum << endl;
+}
+
+struct Range
+{
+	long long from;
+	long long to;
+};
+
+void advent05_02(chrono::steady_clock::time_point begin)
+{
+	ifstream file{ "input\\05.txt" };
+	if (!file.is_open()) {
+		cout << "File is not open";
+		throw "File is not open";
+	}
+	string line;
+	int lineNumber{};
+	vector<Range> ranges;
+	vector<long long> ids;
+	while (getline(file, line)) {
+		lineNumber++;
+		printTime("Line Nr : " + to_string(lineNumber), begin);
+		if (line.empty())
+		{
+			break;
+		}
+		size_t index = line.find('-');
+		long long from = stoll(line.substr(0, index));
+		long long to = stoll(line.substr(index + 1, line.length() - index - 1));
+		
+		
+		bool addRange = true;
+		for (vector<Range>::iterator it = ranges.begin(); it < ranges.end();)
+		{
+			// existing |-------|    |---|
+			// new        |---|      |---|
+			if (it->from <= from && it->to >= to)
+			{
+				addRange = false;
+				break;
+			}
+			// existing    |--|       |--|  |--|
+			// new      |--------| |-----|  |-----|
+			if (it->from >= from && it->to <= to)
+			{
+				it = ranges.erase(it);
+				continue;
+			}
+			// existing |-----|    |----|
+			// new         |----|       |-----|
+			if (it->from <= from && it->to >= from && it->to < to)
+			{
+
+				from = it->to + 1;
+			}
+			// existing   |-----|     |--|
+			// new      |---|      |--|
+			else if (it->from > from && it->from <= to && it->to > to)
+			{
+				to = it->from - 1;
+			}
+			it++;
+		}
+		if (addRange)
+		{
+			ranges.emplace_back(from, to);
+		}
+        
+	}
+	long long sum{};
+	for (auto a : ranges)
+	{
+		sum += (a.to - a.from + 1);
+	}
+	cout << sum << endl;
+
+	for (auto r : ranges)
+	{
+		//cout << r.from << "-" << r.to << endl;
+	}
+}
+
 int main() {
-
-	// Source - https://stackoverflow.com/a
-// Posted by user3762106, modified by community. See post 'Timeline' for change history
-// Retrieved 2025-12-03, License - CC BY-SA 4.0
-
-//***C++11 Style:***
-
-	measure("main", advent04_02);
+	
+	try {
+		measure("main", advent05_02);
+	} catch (string &e)
+	{
+		cout << "Error: " << e << endl;
+	}
 	
     return 0;
 };
