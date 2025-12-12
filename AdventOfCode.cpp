@@ -20,7 +20,8 @@ void printTime(string text, chrono::steady_clock::time_point begin)
 {
 	chrono::steady_clock::time_point end = chrono::steady_clock::now();
 
-	cout << text << "  -  " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "[millisec]" << "\n\n";
+	cout << text << "  -  " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "[millisec]" <<
+		"\n\n";
 }
 
 void measure(string name, function<void(chrono::steady_clock::time_point)> func)
@@ -34,8 +35,7 @@ void measure(string name, function<void(chrono::steady_clock::time_point)> func)
 
 void advent01(chrono::steady_clock::time_point begin)
 {
-
-	std::ifstream file{ "input\\1-test.txt" };
+	std::ifstream file{"input\\1-test.txt"};
 	if (!file.is_open())
 	{
 		throw "File is not open";
@@ -75,7 +75,7 @@ void advent01(chrono::steady_clock::time_point begin)
 
 void advent01_02(chrono::steady_clock::time_point begin)
 {
-	std::ifstream file{ "1-test.txt" };
+	std::ifstream file{"1-test.txt"};
 	if (!file.is_open())
 	{
 		throw "File is not open";
@@ -124,8 +124,9 @@ void advent01_02(chrono::steady_clock::time_point begin)
 
 void advent02(chrono::steady_clock::time_point begin)
 {
-
-	string input{ "78847-119454,636-933,7143759788-7143793713,9960235-10043487,44480-68595,23468-43311,89-123,785189-1014654,3829443354-3829647366,647009-692765,2-20,30-42,120909-197026,5477469-5677783,9191900808-9191943802,1045643-1169377,46347154-46441299,2349460-2379599,719196-779497,483556-641804,265244-450847,210541-230207,195-275,75702340-75883143,58-84,2152-3237,3367-5895,1552-2029,9575-13844,6048-8966,419388311-419470147,936-1409,9292901468-9292987321" };
+	string input{
+		"78847-119454,636-933,7143759788-7143793713,9960235-10043487,44480-68595,23468-43311,89-123,785189-1014654,3829443354-3829647366,647009-692765,2-20,30-42,120909-197026,5477469-5677783,9191900808-9191943802,1045643-1169377,46347154-46441299,2349460-2379599,719196-779497,483556-641804,265244-450847,210541-230207,195-275,75702340-75883143,58-84,2152-3237,3367-5895,1552-2029,9575-13844,6048-8966,419388311-419470147,936-1409,9292901468-9292987321"
+	};
 	istringstream sInput(input);
 	string pair;
 	long long sum = 0;
@@ -133,7 +134,7 @@ void advent02(chrono::steady_clock::time_point begin)
 	{
 		size_t index = pair.find("-");
 		long long from = stoll(pair.substr(0, index));
-		long long to = stoll(pair.substr(index +1, pair.length() - 1));
+		long long to = stoll(pair.substr(index + 1, pair.length() - 1));
 
 		for (long long value = from; value <= to; value++)
 		{
@@ -150,20 +151,19 @@ void advent02(chrono::steady_clock::time_point begin)
 				{
 					// cout << valueStr << ", ";
 					sum += value;
-
 				}
 			}
-			
 		}
 	}
 
 	cout << sum;
-	
 }
 
 void advent02_02(chrono::steady_clock::time_point begin)
 {
-	string input{ "78847-119454,636-933,7143759788-7143793713,9960235-10043487,44480-68595,23468-43311,89-123,785189-1014654,3829443354-3829647366,647009-692765,2-20,30-42,120909-197026,5477469-5677783,9191900808-9191943802,1045643-1169377,46347154-46441299,2349460-2379599,719196-779497,483556-641804,265244-450847,210541-230207,195-275,75702340-75883143,58-84,2152-3237,3367-5895,1552-2029,9575-13844,6048-8966,419388311-419470147,936-1409,9292901468-9292987321" };
+	string input{
+		"78847-119454,636-933,7143759788-7143793713,9960235-10043487,44480-68595,23468-43311,89-123,785189-1014654,3829443354-3829647366,647009-692765,2-20,30-42,120909-197026,5477469-5677783,9191900808-9191943802,1045643-1169377,46347154-46441299,2349460-2379599,719196-779497,483556-641804,265244-450847,210541-230207,195-275,75702340-75883143,58-84,2152-3237,3367-5895,1552-2029,9575-13844,6048-8966,419388311-419470147,936-1409,9292901468-9292987321"
+	};
 	//string input{ "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124" };
 	istringstream sInput(input);
 	string pair;
@@ -212,7 +212,6 @@ void advent02_02(chrono::steady_clock::time_point begin)
 			}
 		}
 		printTime("time: ", begin);
-		
 	}
 
 	for (string number : allInvalid)
@@ -221,21 +220,20 @@ void advent02_02(chrono::steady_clock::time_point begin)
 	}
 
 	cout << sum << endl;
-
 }
 
 void advent03(chrono::steady_clock::time_point begin)
 {
-	ifstream file{ "input\\03.txt" };
+	ifstream file{"input\\03.txt"};
 	if (!file.is_open())
 	{
 		throw "File is not open";
 	}
 
 	string line;
-	int sum{ 0 };
+	int sum{0};
 	vector<char> numbers;
-	for (int n = 9;n >= 1; n--)
+	for (int n = 9; n >= 1; n--)
 	{
 		numbers.push_back(to_string(n)[0]);
 	}
@@ -278,16 +276,16 @@ void advent03(chrono::steady_clock::time_point begin)
 
 void advent03_02(chrono::steady_clock::time_point begin)
 {
-	ifstream file{ "input\\03.txt" };
+	ifstream file{"input\\03.txt"};
 	if (!file.is_open())
 	{
 		throw "File is not open";
 	}
 
 	string line;
-	long long sum{ 0 };
+	long long sum{0};
 	vector<char> numbersAll;
-	for (int n = 9;n >= 1; n--)
+	for (int n = 9; n >= 1; n--)
 	{
 		numbersAll.push_back(to_string(n)[0]);
 	}
@@ -297,7 +295,7 @@ void advent03_02(chrono::steady_clock::time_point begin)
 		lineCount++;
 		cout << "Line: " << lineCount << "   " << line << endl;
 		size_t lastIndexMax = line.length() - 11;
-		vector<char> numbersToCheck{ numbersAll };
+		vector<char> numbersToCheck{numbersAll};
 
 		string valueYoltage{};
 		size_t numberFirstIndex = -1;
@@ -365,7 +363,7 @@ void advent03_02(chrono::steady_clock::time_point begin)
 	cout << sum << endl;
 }
 
-int rollsCountArround(vector<string> const &rows, int rowIndexToCheck, int columnIndexToCheck)
+int rollsCountArround(vector<string> const& rows, int rowIndexToCheck, int columnIndexToCheck)
 {
 	int rollsCout{};
 	for (int rowIndex = rowIndexToCheck - 1; rowIndex <= rowIndexToCheck + 1; rowIndex++)
@@ -380,7 +378,7 @@ int rollsCountArround(vector<string> const &rows, int rowIndexToCheck, int colum
 			{
 				continue;
 			}
-			
+
 			if (rows[rowIndex][columnIndex] == '@')
 			{
 				rollsCout++;
@@ -440,8 +438,9 @@ void advent04_02(chrono::steady_clock::time_point begin)
 	size_t rowLength = rows[0].length();
 	int rollsToLift{};
 	int currentRollsToLift;
-	int round{ 0 };
-	do {
+	int round{0};
+	do
+	{
 		round++;
 		currentRollsToLift = 0;
 		for (int rowsIndex = 0; rowsIndex < rows.size(); rowsIndex++)
@@ -459,18 +458,19 @@ void advent04_02(chrono::steady_clock::time_point begin)
 					rows[rowsIndex][columnIndex] = 'X';
 				}
 			}
-			
 		}
 		printTime("Round " + to_string(round), begin);
-	} while (currentRollsToLift > 0);
+	}
+	while (currentRollsToLift > 0);
 
 	cout << rollsToLift << endl;
 }
 
 void advent05(chrono::steady_clock::time_point begin)
 {
-	ifstream file{ "input\\05.txt" };
-	if (!file.is_open()) {
+	ifstream file{"input\\05.txt"};
+	if (!file.is_open())
+	{
 		throw "File is not open";
 	}
 	string line;
@@ -478,15 +478,20 @@ void advent05(chrono::steady_clock::time_point begin)
 	int sum{};
 	vector<tuple<long long, long long>> ingredientsFresh;
 	int lineNumber{};
-	while (getline(file, line)) {
+	while (getline(file, line))
+	{
 		lineNumber++;
 		cout << "Line Nr: " << lineNumber << endl;
-		if (processIngredients) {
+		if (processIngredients)
+		{
 			long long ingredientId = stoll(line);
 			// todo:
 			auto a = ranges::find_if(ingredientsFresh
 			                         ,
-			                         [ingredientId](tuple<long long, long long> t) { return get<0>(t) <= ingredientId && ingredientId <= get<1>(t); }
+			                         [ingredientId](tuple<long long, long long> t)
+			                         {
+				                         return get<0>(t) <= ingredientId && ingredientId <= get<1>(t);
+			                         }
 			);
 			if (a != ingredientsFresh.end())
 			{
@@ -503,7 +508,6 @@ void advent05(chrono::steady_clock::time_point begin)
 		long long from = stoll(line.substr(0, index));
 		long long to = stoll(line.substr(index + 1, line.length() - index - 1));
 		ingredientsFresh.emplace_back(from, to);
-		
 	}
 	cout << sum << endl;
 }
@@ -514,67 +518,82 @@ struct Range
 	long long to;
 };
 
-void advent05_02(chrono::steady_clock::time_point begin)
+static void processFile(string const filePath, function<bool(string const& line, int const& lineNumber)> processLine)
 {
-	ifstream file{ "input\\05.txt" };
-	if (!file.is_open()) {
-		cout << "File is not open";
+	ifstream file{filePath};
+	if (!file.is_open())
+	{
 		throw "File is not open";
 	}
 	string line;
 	int lineNumber{};
-	vector<Range> ranges;
-	vector<long long> ids;
-	while (getline(file, line)) {
+
+	while (getline(file, line))
+	{
 		lineNumber++;
-		printTime("Line Nr : " + to_string(lineNumber), begin);
-		if (line.empty())
+
+		if (!processLine(line, lineNumber))
 		{
 			break;
 		}
-		size_t index = line.find('-');
-		long long from = stoll(line.substr(0, index));
-		long long to = stoll(line.substr(index + 1, line.length() - index - 1));
-		
-		
-		bool addRange = true;
-		for (vector<Range>::iterator it = ranges.begin(); it < ranges.end();)
-		{
-			// existing |-------|    |---|
-			// new        |---|      |---|
-			if (it->from <= from && it->to >= to)
-			{
-				addRange = false;
-				break;
-			}
-			// existing    |--|       |--|  |--|
-			// new      |--------| |-----|  |-----|
-			if (it->from >= from && it->to <= to)
-			{
-				it = ranges.erase(it);
-				continue;
-			}
-			// existing |-----|    |----|
-			// new         |----|       |-----|
-			if (it->from <= from && it->to >= from && it->to < to)
-			{
-
-				from = it->to + 1;
-			}
-			// existing   |-----|     |--|
-			// new      |---|      |--|
-			else if (it->from > from && it->from <= to && it->to > to)
-			{
-				to = it->from - 1;
-			}
-			it++;
-		}
-		if (addRange)
-		{
-			ranges.emplace_back(from, to);
-		}
-        
 	}
+}
+
+void advent05_02(chrono::steady_clock::time_point begin)
+{
+	vector<Range> ranges;
+	vector<long long> ids;
+
+	processFile("input\\05.txt", [&](string const& line, int const& lineNumber) -> bool
+	            {
+		            printTime("Line Nr : " + to_string(lineNumber), begin);
+		            if (line.empty())
+		            {
+			            return false;
+		            }
+		            size_t index = line.find('-');
+		            long long from = stoll(line.substr(0, index));
+		            long long to = stoll(line.substr(index + 1, line.length() - index - 1));
+
+
+		            bool addRange = true;
+		            for (vector<Range>::iterator it = ranges.begin(); it < ranges.end();)
+		            {
+			            // existing |-------|    |---|
+			            // new        |---|      |---|
+			            if (it->from <= from && it->to >= to)
+			            {
+				            addRange = false;
+				            break;
+			            }
+			            // existing    |--|       |--|  |--|
+			            // new      |--------| |-----|  |-----|
+			            if (it->from >= from && it->to <= to)
+			            {
+				            it = ranges.erase(it);
+				            continue;
+			            }
+			            // existing |-----|    |----|
+			            // new         |----|       |-----|
+			            if (it->from <= from && it->to >= from && it->to < to)
+			            {
+				            from = it->to + 1;
+			            }
+			            // existing   |-----|     |--|
+			            // new      |---|      |--|
+			            else if (it->from > from && it->from <= to && it->to > to)
+			            {
+				            to = it->from - 1;
+			            }
+			            it++;
+		            }
+		            if (addRange)
+		            {
+			            ranges.emplace_back(from, to);
+		            }
+		            return true;
+	            }
+	);
 	long long sum{};
 	for (auto a : ranges)
 	{
@@ -588,14 +607,16 @@ void advent05_02(chrono::steady_clock::time_point begin)
 	}
 }
 
-int main() {
-	
-	try {
+int main()
+{
+	try
+	{
 		measure("main", advent05_02);
-	} catch (string &e)
+	}
+	catch (string& e)
 	{
 		cout << "Error: " << e << endl;
 	}
-	
-    return 0;
+
+	return 0;
 };
