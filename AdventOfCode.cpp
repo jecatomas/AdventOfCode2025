@@ -5,9 +5,6 @@
 #include <set>
 #include <string>
 #include <vector>
-#include <climits>
-#include <iomanip>
-#include <cmath>
 #include <fstream>
 #include <sstream>
 #include <functional>
@@ -16,36 +13,53 @@
 
 using namespace std;
 
-void printTime(string text, chrono::steady_clock::time_point begin)
+static void print_time(string const& text, chrono::steady_clock::time_point const& begin)
 {
 	chrono::steady_clock::time_point end = chrono::steady_clock::now();
 
-	cout << text << "  -  " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "[millisec]" <<
+	cout << text << "  -  " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "[millisecond]" <<
 		"\n\n";
 }
 
-void measure(string name, function<void(chrono::steady_clock::time_point)> func)
+static void measure(string const& name, function<void(chrono::steady_clock::time_point)> const& func)
 {
 	chrono::steady_clock::time_point begin = chrono::steady_clock::now();
 
 	func(begin);
 
-	printTime(name + ": Total tile = ", begin);
+	print_time(name + ": Total tile = ", begin);
 }
 
-void advent01(chrono::steady_clock::time_point begin)
+static void processFile(string const& filePath,
+                        function<bool(string const& line, int const& lineNumber)> const& processLine)
 {
-	std::ifstream file{"input\\1-test.txt"};
+	ifstream file{filePath};
 	if (!file.is_open())
 	{
 		throw "File is not open";
 	}
+	string line;
+	int lineNumber{};
+
+	while (getline(file, line))
+	{
+		lineNumber++;
+
+		if (!processLine(line, lineNumber))
+		{
+			break;
+		}
+	}
+}
+
+static void advent01(chrono::steady_clock::time_point const& begin)
+{
 	std::vector<std::string> lines;
-	std::string line;
-	while (std::getline(file, line))
+	processFile("input\\1-test.txt", [&](string const& line, int const& lineNumber) -> bool
 	{
 		lines.push_back(line);
-	}
+		return true;
+	});
 
 	int position = 50;
 	int zeroCount = 0;
@@ -73,19 +87,15 @@ void advent01(chrono::steady_clock::time_point begin)
 	std::cout << zeroCount;
 }
 
-void advent01_02(chrono::steady_clock::time_point begin)
+static void advent01_02(chrono::steady_clock::time_point begin)
 {
-	std::ifstream file{"1-test.txt"};
-	if (!file.is_open())
-	{
-		throw "File is not open";
-	}
 	std::vector<std::string> lines;
-	std::string line;
-	while (std::getline(file, line))
+
+	processFile("input\\1-test.txt", [&](string const& line, int const& lineNumber) -> bool
 	{
 		lines.push_back(line);
-	}
+		return true;
+	});
 
 	int position = 50;
 	int zeroCount = 0;
@@ -95,7 +105,7 @@ void advent01_02(chrono::steady_clock::time_point begin)
 		int sign = rotation[0] == 'L' ? -1 : 1;
 		int rotationNumber = std::stoi(rotation.substr(1));
 		int rotationRest = (rotationNumber % 100) * sign;
-		// how many time it go around
+		// how many times it goes around
 		int zeroExtraCount = rotationNumber / 100;
 		zeroCount += zeroExtraCount;
 		position += rotationRest;
@@ -122,7 +132,7 @@ void advent01_02(chrono::steady_clock::time_point begin)
 	std::cout << zeroCount;
 }
 
-void advent02(chrono::steady_clock::time_point begin)
+static void advent02(chrono::steady_clock::time_point begin)
 {
 	string input{
 		"78847-119454,636-933,7143759788-7143793713,9960235-10043487,44480-68595,23468-43311,89-123,785189-1014654,3829443354-3829647366,647009-692765,2-20,30-42,120909-197026,5477469-5677783,9191900808-9191943802,1045643-1169377,46347154-46441299,2349460-2379599,719196-779497,483556-641804,265244-450847,210541-230207,195-275,75702340-75883143,58-84,2152-3237,3367-5895,1552-2029,9575-13844,6048-8966,419388311-419470147,936-1409,9292901468-9292987321"
@@ -159,7 +169,7 @@ void advent02(chrono::steady_clock::time_point begin)
 	cout << sum;
 }
 
-void advent02_02(chrono::steady_clock::time_point begin)
+static void advent02_02(chrono::steady_clock::time_point begin)
 {
 	string input{
 		"78847-119454,636-933,7143759788-7143793713,9960235-10043487,44480-68595,23468-43311,89-123,785189-1014654,3829443354-3829647366,647009-692765,2-20,30-42,120909-197026,5477469-5677783,9191900808-9191943802,1045643-1169377,46347154-46441299,2349460-2379599,719196-779497,483556-641804,265244-450847,210541-230207,195-275,75702340-75883143,58-84,2152-3237,3367-5895,1552-2029,9575-13844,6048-8966,419388311-419470147,936-1409,9292901468-9292987321"
@@ -211,10 +221,10 @@ void advent02_02(chrono::steady_clock::time_point begin)
 				}
 			}
 		}
-		printTime("time: ", begin);
+		print_time("time: ", begin);
 	}
 
-	for (string number : allInvalid)
+	for (string const& number : allInvalid)
 	{
 		sum += stoll(number);
 	}
@@ -222,22 +232,16 @@ void advent02_02(chrono::steady_clock::time_point begin)
 	cout << sum << endl;
 }
 
-void advent03(chrono::steady_clock::time_point begin)
+static void advent03(chrono::steady_clock::time_point begin)
 {
-	ifstream file{"input\\03.txt"};
-	if (!file.is_open())
-	{
-		throw "File is not open";
-	}
-
-	string line;
 	int sum{0};
 	vector<char> numbers;
 	for (int n = 9; n >= 1; n--)
 	{
 		numbers.push_back(to_string(n)[0]);
 	}
-	while (getline(file, line))
+
+	processFile("input\\03.txt", [&](string const& line, int const& lineNumber) -> bool
 	{
 		size_t lastIndex = line.length() - 1;
 		char number1;
@@ -270,30 +274,23 @@ void advent03(chrono::steady_clock::time_point begin)
 		valueStr += number2;
 
 		sum += stoi(valueStr);
-	}
+		return true;
+	});
+
 	cout << sum;
 }
 
 void advent03_02(chrono::steady_clock::time_point begin)
 {
-	ifstream file{"input\\03.txt"};
-	if (!file.is_open())
-	{
-		throw "File is not open";
-	}
-
-	string line;
 	long long sum{0};
 	vector<char> numbersAll;
 	for (int n = 9; n >= 1; n--)
 	{
 		numbersAll.push_back(to_string(n)[0]);
 	}
-	int lineCount = 0;
-	while (getline(file, line))
+	processFile("input\\03.txt", [&](string const& line, int const& lineNumber) -> bool
 	{
-		lineCount++;
-		cout << "Line: " << lineCount << "   " << line << endl;
+		cout << "Line: " << lineNumber << "   " << line << endl;
 		size_t lastIndexMax = line.length() - 11;
 		vector<char> numbersToCheck{numbersAll};
 
@@ -327,43 +324,15 @@ void advent03_02(chrono::steady_clock::time_point begin)
 			}
 		}
 		cout << "Yoltage: " << valueYoltage << endl;
-		printTime("", begin);
-		/*
-		char number1;
-		char number2;
-		size_t numberFirstIndex = 0;
-		for (char number : numbers)
-		{
-			size_t index = line.find(number);
-			if (index == string::npos || index == lastIndex)
-			{
-				continue;
-			}
-			number1 = number;
-			numberFirstIndex = index;
-			break;
-		}
+		print_time("", begin);
 
-		for (char number : numbers)
-		{
-			size_t index = line.find(number, numberFirstIndex + 1);
-			if (index == string::npos)
-			{
-				continue;
-			}
-			number2 = number;
-			break;
-		}
-		string valueStr{};
-		valueStr += number1;
-		valueStr += number2;
-		*/
 		sum += stoll(valueYoltage);
-	}
+		return true;
+	});
 	cout << sum << endl;
 }
 
-int rollsCountArround(vector<string> const& rows, int rowIndexToCheck, int columnIndexToCheck)
+static int rolls_count_around(vector<string> const& rows, int rowIndexToCheck, int columnIndexToCheck)
 {
 	int rollsCout{};
 	for (int rowIndex = rowIndexToCheck - 1; rowIndex <= rowIndexToCheck + 1; rowIndex++)
@@ -388,19 +357,15 @@ int rollsCountArround(vector<string> const& rows, int rowIndexToCheck, int colum
 	return rollsCout;
 }
 
-void advent04(chrono::steady_clock::time_point begin)
+static void advent04(chrono::steady_clock::time_point begin)
 {
-	ifstream file("input\\04.txt");
-	if (!file.is_open())
-	{
-		throw "File is not open";
-	}
 	vector<string> rows;
-	string row;
-	while (getline(file, row))
+	processFile("input\\04.txt", [&](string const& line, int const& lineNumber) -> bool
 	{
-		rows.push_back(row);
-	}
+		rows.push_back(line);
+		return true;
+	});
+
 	size_t rowLength = rows[0].length();
 	int rollsToLift{};
 	for (int rowsIndex = 0; rowsIndex < rows.size(); rowsIndex++)
@@ -411,12 +376,12 @@ void advent04(chrono::steady_clock::time_point begin)
 			{
 				continue;
 			}
-			if (rollsCountArround(rows, rowsIndex, columnIndex) < 4)
+			if (rolls_count_around(rows, rowsIndex, columnIndex) < 4)
 			{
 				rollsToLift++;
 			}
 		}
-		printTime("Row " + to_string(rowsIndex), begin);
+		print_time("Row " + to_string(rowsIndex), begin);
 	}
 
 	cout << rollsToLift << endl;
@@ -424,17 +389,13 @@ void advent04(chrono::steady_clock::time_point begin)
 
 void advent04_02(chrono::steady_clock::time_point begin)
 {
-	ifstream file("input\\04.txt");
-	if (!file.is_open())
-	{
-		throw "File is not open";
-	}
 	vector<string> rows;
-	string row;
-	while (getline(file, row))
+	processFile("input\\04.txt", [&](string const& line, int const& lineNumber) -> bool
 	{
-		rows.push_back(row);
-	}
+		rows.push_back(line);
+		return true;
+	});
+
 	size_t rowLength = rows[0].length();
 	int rollsToLift{};
 	int currentRollsToLift;
@@ -451,7 +412,7 @@ void advent04_02(chrono::steady_clock::time_point begin)
 				{
 					continue;
 				}
-				if (rollsCountArround(rows, rowsIndex, columnIndex) < 4)
+				if (rolls_count_around(rows, rowsIndex, columnIndex) < 4)
 				{
 					rollsToLift++;
 					currentRollsToLift++;
@@ -459,56 +420,47 @@ void advent04_02(chrono::steady_clock::time_point begin)
 				}
 			}
 		}
-		printTime("Round " + to_string(round), begin);
+		print_time("Round " + to_string(round), begin);
 	}
 	while (currentRollsToLift > 0);
 
 	cout << rollsToLift << endl;
 }
 
-void advent05(chrono::steady_clock::time_point begin)
+static void advent05(chrono::steady_clock::time_point begin)
 {
-	ifstream file{"input\\05.txt"};
-	if (!file.is_open())
-	{
-		throw "File is not open";
-	}
-	string line;
 	bool processIngredients{false};
 	int sum{};
 	vector<tuple<long long, long long>> ingredientsFresh;
-	int lineNumber{};
-	while (getline(file, line))
+	processFile("input\\04.txt", [&](string const& line, int const& lineNumber) -> bool
 	{
-		lineNumber++;
 		cout << "Line Nr: " << lineNumber << endl;
 		if (processIngredients)
 		{
 			long long ingredientId = stoll(line);
 			// todo:
-			auto a = ranges::find_if(ingredientsFresh
-			                         ,
-			                         [ingredientId](tuple<long long, long long> t)
-			                         {
-				                         return get<0>(t) <= ingredientId && ingredientId <= get<1>(t);
-			                         }
-			);
+			auto a = ranges::find_if(ingredientsFresh, [ingredientId](tuple<long long, long long> t)
+			{
+				return get<0>(t) <= ingredientId && ingredientId <= get<1>(t);
+			});
 			if (a != ingredientsFresh.end())
 			{
 				sum++;
 			}
-			continue;
+			return true;
 		}
 		if (line.empty())
 		{
 			processIngredients = true;
-			continue;
+			return true;
 		}
 		size_t index = line.find('-');
 		long long from = stoll(line.substr(0, index));
 		long long to = stoll(line.substr(index + 1, line.length() - index - 1));
 		ingredientsFresh.emplace_back(from, to);
-	}
+		return true;
+	});
+
 	cout << sum << endl;
 }
 
@@ -518,93 +470,67 @@ struct Range
 	long long to;
 };
 
-static void processFile(string const filePath, function<bool(string const& line, int const& lineNumber)> processLine)
-{
-	ifstream file{filePath};
-	if (!file.is_open())
-	{
-		throw "File is not open";
-	}
-	string line;
-	int lineNumber{};
 
-	while (getline(file, line))
-	{
-		lineNumber++;
-
-		if (!processLine(line, lineNumber))
-		{
-			break;
-		}
-	}
-}
-
-void advent05_02(chrono::steady_clock::time_point begin)
+static void advent05_02(chrono::steady_clock::time_point begin)
 {
 	vector<Range> ranges;
 	vector<long long> ids;
 
 	processFile("input\\05.txt", [&](string const& line, int const& lineNumber) -> bool
-	            {
-		            printTime("Line Nr : " + to_string(lineNumber), begin);
-		            if (line.empty())
-		            {
-			            return false;
-		            }
-		            size_t index = line.find('-');
-		            long long from = stoll(line.substr(0, index));
-		            long long to = stoll(line.substr(index + 1, line.length() - index - 1));
+	{
+		print_time("Line Nr : " + to_string(lineNumber), begin);
+		if (line.empty())
+		{
+			return false;
+		}
+		size_t index = line.find('-');
+		long long from = stoll(line.substr(0, index));
+		long long to = stoll(line.substr(index + 1, line.length() - index - 1));
 
 
-		            bool addRange = true;
-		            for (vector<Range>::iterator it = ranges.begin(); it < ranges.end();)
-		            {
-			            // existing |-------|    |---|
-			            // new        |---|      |---|
-			            if (it->from <= from && it->to >= to)
-			            {
-				            addRange = false;
-				            break;
-			            }
-			            // existing    |--|       |--|  |--|
-			            // new      |--------| |-----|  |-----|
-			            if (it->from >= from && it->to <= to)
-			            {
-				            it = ranges.erase(it);
-				            continue;
-			            }
-			            // existing |-----|    |----|
-			            // new         |----|       |-----|
-			            if (it->from <= from && it->to >= from && it->to < to)
-			            {
-				            from = it->to + 1;
-			            }
-			            // existing   |-----|     |--|
-			            // new      |---|      |--|
-			            else if (it->from > from && it->from <= to && it->to > to)
-			            {
-				            to = it->from - 1;
-			            }
-			            it++;
-		            }
-		            if (addRange)
-		            {
-			            ranges.emplace_back(from, to);
-		            }
-		            return true;
-	            }
-	);
+		bool addRange = true;
+		for (vector<Range>::iterator it = ranges.begin(); it < ranges.end();)
+		{
+			// existing |-------|    |---|
+			// new        |---|      |---|
+			if (it->from <= from && it->to >= to)
+			{
+				addRange = false;
+				break;
+			}
+			// existing    |--|       |--|  |--|
+			// new      |--------| |-----|  |-----|
+			if (it->from >= from && it->to <= to)
+			{
+				it = ranges.erase(it);
+				continue;
+			}
+			// existing |-----|    |----|
+			// new         |----|       |-----|
+			if (it->from <= from && it->to >= from && it->to < to)
+			{
+				from = it->to + 1;
+			}
+			// existing   |-----|     |--|
+			// new      |---|      |--|
+			else if (it->from > from && it->from <= to && it->to > to)
+			{
+				to = it->from - 1;
+			}
+			it++;
+		}
+		if (addRange)
+		{
+			ranges.emplace_back(from, to);
+		}
+		return true;
+	});
 	long long sum{};
 	for (auto a : ranges)
 	{
 		sum += (a.to - a.from + 1);
 	}
 	cout << sum << endl;
-
-	for (auto r : ranges)
-	{
-		//cout << r.from << "-" << r.to << endl;
-	}
 }
 
 int main()
