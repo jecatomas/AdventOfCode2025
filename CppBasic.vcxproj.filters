@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Days">
+      <UniqueIdentifier>{d5189703-f6bc-4477-ade8-15e217b538ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Days\headers">
+      <UniqueIdentifier>{78805f7e-cdac-443c-8122-1b9514f803a0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Day01.cpp">
+      <Filter>Days</Filter>
+    </ClCompile>
+    <ClCompile Include="DayBase.cpp">
+      <Filter>Days</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Day02.cpp">
+      <Filter>Days</Filter>
+    </ClCompile>
+    <ClCompile Include="Day03.cpp">
+      <Filter>Days</Filter>
+    </ClCompile>
+    <ClCompile Include="Day04.cpp">
+      <Filter>Days</Filter>
+    </ClCompile>
+    <ClCompile Include="Day05.cpp">
+      <Filter>Days</Filter>
+    </ClCompile>
+    <ClCompile Include="Day06.cpp">
+      <Filter>Days</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Day01.h">
+      <Filter>Days\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Day02.h">
+      <Filter>Days\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Day03.h">
+      <Filter>Days\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DayBase.h">
+      <Filter>Days\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Day04.h">
+      <Filter>Days\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Day05.h">
+      <Filter>Days\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Day06.h">
+      <Filter>Days\headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

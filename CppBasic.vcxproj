@@ -133,7 +133,23 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AdventOfCode.cpp" />
+    <ClCompile Include="Day02.cpp" />
+    <ClCompile Include="Day03.cpp" />
+    <ClCompile Include="Day04.cpp" />
+    <ClCompile Include="Day05.cpp" />
+    <ClCompile Include="Day06.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Day01.cpp" />
+    <ClCompile Include="DayBase.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Day01.h" />
+    <ClInclude Include="Day02.h" />
+    <ClInclude Include="Day03.h" />
+    <ClInclude Include="Day04.h" />
+    <ClInclude Include="Day05.h" />
+    <ClInclude Include="Day06.h" />
+    <ClInclude Include="DayBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
